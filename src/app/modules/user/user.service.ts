@@ -1,15 +1,20 @@
+import { Debugger } from "../../utils/debugger";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
 
 const createUser = async (payload: Partial<IUser>) => {
-    const {name, email} = payload;
+    try {
+        const {name, email} = payload;
 
-    const user = await User.create({
-        name, 
-        email
-    });
+        const user = await User.create({
+            name, 
+            email
+        });
 
-    return user;
+        return user;
+    } catch(error){
+        Debugger.error(error);
+    }
 };
 
 export const UserServices = {
