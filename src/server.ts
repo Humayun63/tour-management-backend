@@ -10,18 +10,18 @@ const startServer = async () => {
     try {
         await mongoose.connect("mongodb+srv://noteapp:noteapp@cluster0.nucgrat.mongodb.net/ph-tour-management?retryWrites=true&w=majority&appName=Cluster0");
 
-        console.log('DB is connected!');
+        console.info('DB is connected!');
 
         server = app.listen(PORT, () => {
-            console.log(`App is listening to port ${PORT}`);
+            console.info(`App is listening to port ${PORT}`);
         })
     } catch(error) {
-
+        console.error(error);
     }
 };
 
 process.on('unhandledRejection', (error) => {
-    console.log('Unhandled Rejection Detected!..Shuting down the server...', error);
+    console.info('Unhandled Rejection Detected!..Shuting down the server...', error);
 
     if(server){
         server.close(() => {
@@ -34,7 +34,7 @@ process.on('unhandledRejection', (error) => {
 
 
 process.on('uncaughtException', (error) => {
-    console.log('Uncaught Exception detected!... server is shutting down..', error);
+    console.info('Uncaught Exception detected!... server is shutting down..', error);
 
     if(server){
         server.close(() => {
@@ -46,7 +46,7 @@ process.on('uncaughtException', (error) => {
 });
 
 process.on('SIGTERM', () => {
-    console.log('Received SIGTERM!.. Shutting down...');
+    console.info('Received SIGTERM!.. Shutting down...');
 
     if(server){
         server.close(() => {
@@ -58,7 +58,7 @@ process.on('SIGTERM', () => {
 });
 
 process.on('SIGINT', () => {
-    console.log('Received SIGINT!.. Shutting down...');
+    console.info('Received SIGINT!.. Shutting down...');
 
     if(server){
         server.close(() => {
