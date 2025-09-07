@@ -33,4 +33,16 @@ process.on('unhandledRejection', (error) => {
 });
 
 
+process.on('uncaughtException', (error) => {
+    console.log('Uncaught Exception detected!... server is shutting down..', error);
+
+    if(server){
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+
+    process.exit(1);
+});
+
 startServer();
