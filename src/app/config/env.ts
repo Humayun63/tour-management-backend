@@ -11,7 +11,7 @@ interface IEnvConfig {
 
 const loadVariables = (): IEnvConfig => {
     const requiredEnvVars: string[] = ['PORT', 'DB_URL', 'NODE_ENV']
-
+console.log('so far so good')
     requiredEnvVars.forEach(key => {
         if(!process.env[key]){
             Debugger.error(`Missing required variable ${key}`);
