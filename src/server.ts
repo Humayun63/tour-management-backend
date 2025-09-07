@@ -45,4 +45,28 @@ process.on('uncaughtException', (error) => {
     process.exit(1);
 });
 
+process.on('SIGTERM', () => {
+    console.log('Received SIGTERM!.. Shutting down...');
+
+    if(server){
+        server.close(() => {
+            process.exit(1);
+        })
+    }
+
+    process.exit(1);
+});
+
+process.on('SIGINT', () => {
+    console.log('Received SIGINT!.. Shutting down...');
+
+    if(server){
+        server.close(() => {
+            process.exit(1);
+        })
+    }
+
+    process.exit(1);
+})
+
 startServer();
