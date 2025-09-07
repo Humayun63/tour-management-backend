@@ -1,7 +1,10 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import fs from "fs";
 import path from "path";
 
-const logFile = path.join(__dirname, "../debug.log");
+const logFile = path.join(__dirname, "../../debug.log");
 
 type LogLevel = "log" | "info" | "error";
 
