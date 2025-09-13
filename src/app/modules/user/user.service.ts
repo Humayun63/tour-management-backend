@@ -17,6 +17,13 @@ const createUser = async (payload: Partial<IUser>) => {
     }
 };
 
+const getAllUsers = async () => {
+    const user = await User.find({});
+
+    return user;
+}
+
 export const UserServices = {
-    createUser
+    createUser,
+    getAllUsers,
 }
