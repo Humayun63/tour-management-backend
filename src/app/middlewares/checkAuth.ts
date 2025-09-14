@@ -19,6 +19,6 @@ export const checkAuth = (...authRoles: string[]) => catchAsync(async (req: Requ
         throw new AppError(httpStatus.UNAUTHORIZED, "You are not permitted to view this route!");
     };
 
-    // req.user = verifiedToken;
+    req.user = verifiedToken;
     next();
 });
