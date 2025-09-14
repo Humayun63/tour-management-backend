@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import app from './app';
 import { Debugger } from './app/utils/debugger';
 import { envVars } from './app/config/env';
+import { seedSuperAdmin } from './app/utils/seedSuperAdmin';
 
 let server: Server;
 
@@ -71,6 +72,9 @@ process.on('SIGINT', () => {
     }
 
     process.exit(1);
-})
+});
 
-startServer();
+(async () => {
+    await startServer();
+    await seedSuperAdmin();
+})();
