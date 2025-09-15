@@ -28,9 +28,14 @@ export const credentialsLogin = async (payload: Partial<IUser>) => {
     }
 
     const accessToken = await generateToken(jwtPayload, envVars.JWT_ACCESS_SECRET, envVars.JWT_ACCESS_EXPIRES);
+    const refreshToken = await generateToken(jwtPayload, envVars.JWT_REFRESH_SECRET, envVars.JWT_REFRESH_EXPIRES);
+
+    const {password: pass, ...others} = isUserExist;
 
     return {
-        accessToken
+        accessToken,
+        refreshToken,
+        user: {...others}
     }
 
 };
