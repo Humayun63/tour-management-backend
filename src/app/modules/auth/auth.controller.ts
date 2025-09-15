@@ -15,6 +15,21 @@ export const credentialsLogin = catchAsync(async (req: Request, res: Response, n
     });
 });
 
+export const getAccessToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const refreshToken = req.headers.authorization;
+
+    const result = await AuthServices.getAccessToken(refreshToken as string);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        message: "Access token generated successfully",
+        success: true,
+        data: result,
+    });
+});
+
+
 export const AuthController = {
-    credentialsLogin
+    credentialsLogin,
+    getAccessToken,
 }
