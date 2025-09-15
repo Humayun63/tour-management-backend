@@ -1,12 +1,10 @@
 import AppError from "../../errorHelpers/AppError";
-import { IsActive, IUser } from "../user/user.interface";
+import { IUser, IUserDoc } from "../user/user.interface";
 import { User } from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from 'bcryptjs';
 import { generateAccessTokenWithRefreshToken, generateUserTokens } from "../../utils/userTokens";
-import { verifyToken } from "../../utils/jwt";
-import { envVars } from "../../config/env";
-import { JwtPayload } from "jsonwebtoken";
+import { hashedPassword } from "../../utils/hashedPassword";
 
 export const credentialsLogin = async (payload: Partial<IUser>) => {
     const {email, password, ...rest} = payload;
@@ -37,13 +35,26 @@ export const credentialsLogin = async (payload: Partial<IUser>) => {
 
 export const getAccessToken = async (accessToken: string) => {
     const tokens = await generateAccessTokenWithRefreshToken(accessToken);
-    
+
     return {
         accessToken: tokens.accessToken,
     };
 };
 
+export const resetPassword = async (oldPassword: string, newPassword: string, userInfo: Partial<IUser>) => {
+    const  user = await User.findById(userInfo._id) as IUserDoc;
+    const isSamePassword = await bcryptjs.compare(oldPassword as string, user.password as string)
+    
+    if(!isSamePassword){
+        throw new AppError(httpStatus.BAD_REQUEST, "Old password did not matched!")
+    }
+
+    user.password = await hashedPassword(newPassword);
+    user.save();
+};
+
 export const AuthServices = {
     credentialsLogin,
     getAccessToken,
+    resetPassword,
 }

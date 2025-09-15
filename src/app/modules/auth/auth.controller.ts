@@ -6,7 +6,7 @@ import { AuthServices } from "./auth.services";
 import AppError from "../../errorHelpers/AppError";
 import { clearAuthCookie, setAuthCookies } from "../../utils/autCookies";
 
-export const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const result = await AuthServices.credentialsLogin(req.body);
 
     setAuthCookies(res, result);
@@ -18,7 +18,7 @@ export const credentialsLogin = catchAsync(async (req: Request, res: Response, n
     });
 });
 
-export const getAccessToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const getAccessToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken;
     if(!refreshToken){
         throw new AppError(httpStatus.BAD_REQUEST, 'No Refresh token provided')
@@ -34,7 +34,7 @@ export const getAccessToken = catchAsync(async (req: Request, res: Response, nex
     });
 });
 
-export const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     
     clearAuthCookie(res);
     sendResponse(res, {
@@ -45,9 +45,24 @@ export const logout = catchAsync(async (req: Request, res: Response, next: NextF
     });
 });
 
+const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const userInfo = req.user;
+    const {oldPassword, newPassword} = req.body;
+    
+    await AuthServices.resetPassword(oldPassword, newPassword, userInfo);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        message: "Password changed successfully",
+        success: true,
+        data: null,
+    });
+});
+
 
 export const AuthController = {
     credentialsLogin,
     getAccessToken,
     logout,
+    resetPassword,
 }

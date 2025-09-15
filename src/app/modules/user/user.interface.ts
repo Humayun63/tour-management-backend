@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export enum Role {
     SUPER_ADMIN = "SUPER_ADMIN",
@@ -39,3 +39,5 @@ export interface IUser {
     bookings?: Types.ObjectId[]
     guides?: Types.ObjectId[]
 }
+
+export type IUserDoc = IUser & Document;
