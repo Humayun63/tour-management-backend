@@ -4,6 +4,7 @@ const router = Router();
 
 router.post('/login', AuthController.credentialsLogin);
 router.post('/access-token', AuthController.getAccessToken);
+router.post('/logout', AuthController.logout);
 
 
 export const AuthRoutes = router;

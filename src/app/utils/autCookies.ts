@@ -19,3 +19,15 @@ export const setAuthCookies = (res: Response, tokens: IAuthTokens) => {
         })
     }
 };
+
+export const clearAuthCookie = (res: Response) => {
+    const cookieNames = ['accessToken', 'refreshToken'];
+
+    cookieNames.forEach(item => {
+        res.clearCookie(item, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax'
+        })
+    })
+};

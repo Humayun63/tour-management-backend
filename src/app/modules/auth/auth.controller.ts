@@ -4,7 +4,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from 'http-status-codes'
 import { AuthServices } from "./auth.services";
 import AppError from "../../errorHelpers/AppError";
-import { setAuthCookies } from "../../utils/autCookies";
+import { clearAuthCookie, setAuthCookies } from "../../utils/autCookies";
 
 export const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const result = await AuthServices.credentialsLogin(req.body);
@@ -24,7 +24,7 @@ export const getAccessToken = catchAsync(async (req: Request, res: Response, nex
         throw new AppError(httpStatus.BAD_REQUEST, 'No Refresh token provided')
     }
     const result = await AuthServices.getAccessToken(refreshToken as string);
-    
+
     setAuthCookies(res, result);
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -34,8 +34,20 @@ export const getAccessToken = catchAsync(async (req: Request, res: Response, nex
     });
 });
 
+export const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    
+    clearAuthCookie(res);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        message: "User logout successfully",
+        success: true,
+        data: null,
+    });
+});
+
 
 export const AuthController = {
     credentialsLogin,
     getAccessToken,
+    logout,
 }
